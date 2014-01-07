@@ -5,6 +5,10 @@
 //====================================================================================================
 
 #import "GroupsTableController.h"
+#import "PCSAddressBook.h"
+#import "PCSAddressBookGroup.h"
+#import "PCSAddressBookPerson.h"
+#import "PeopleTableController.h"
 
 typedef NS_ENUM(int, Sections) {
    Section_Hello,
@@ -13,7 +17,7 @@ typedef NS_ENUM(int, Sections) {
 
 @interface GroupsTableController()
 
-
+@property (nonatomic, strong) NSMutableArray *groups;
 
 @end
 
@@ -21,6 +25,7 @@ typedef NS_ENUM(int, Sections) {
 
 - (id)init {
    if ((self = [super initWithStyle:UITableViewStylePlain])) {
+      self.groups = [NSMutableArray array];
    }
    return self;
 }
@@ -29,7 +34,10 @@ typedef NS_ENUM(int, Sections) {
    [super viewDidLoad];
    self.title = @"Groups";
    
-   
+   [[PCSAddressBook addressBook] requestAccessWithCompletion:^(BOOL granted, NSError *error) {
+      [self.groups setArray:[PCSAddressBook addressBook].groups];
+      [self.tableView reloadData];
+   }];
 }
 
 //====================================================================================================
@@ -41,7 +49,7 @@ typedef NS_ENUM(int, Sections) {
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-   return 1;
+   return [self.groups count] + 1;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -50,16 +58,31 @@ typedef NS_ENUM(int, Sections) {
    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
    if (cell == nil) {
       cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+      cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
    }
    
-   cell.textLabel.text = @"hello";
+   if (indexPath.row == [self.groups count]) {
+      cell.textLabel.text = @"All Contacts";
+   }
+   else {
+      PCSAddressBookGroup *group = self.groups[indexPath.row];
+      cell.textLabel.text = group.name;
+   }
    
    return cell;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
    if (Section_Hello == indexPath.section) {
-      
+      if (indexPath.row == [self.groups count]) {
+         PeopleTableController *controller = [[PeopleTableController alloc] initWithGroup:nil];
+         [self.navigationController pushViewController:controller animated:YES];
+      }
+      else {
+         PCSAddressBookGroup *group = self.groups[indexPath.row];
+         PeopleTableController *controller = [[PeopleTableController alloc] initWithGroup:group];
+         [self.navigationController pushViewController:controller animated:YES];
+      }
    }
 }
 

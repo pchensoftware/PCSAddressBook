@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		81144885187BDDD50050DEB6 /* AddressBook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81144884187BDDD50050DEB6 /* AddressBook.framework */; };
 		81318963187BDBCD00B97C88 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81318962187BDBCD00B97C88 /* Foundation.framework */; };
 		81318965187BDBCD00B97C88 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81318964187BDBCD00B97C88 /* CoreGraphics.framework */; };
 		81318967187BDBCD00B97C88 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81318966187BDBCD00B97C88 /* UIKit.framework */; };
@@ -22,6 +23,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		81144884187BDDD50050DEB6 /* AddressBook.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AddressBook.framework; path = System/Library/Frameworks/AddressBook.framework; sourceTree = SDKROOT; };
 		8131895F187BDBCD00B97C88 /* PCSAddressBookExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PCSAddressBookExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		81318962187BDBCD00B97C88 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		81318964187BDBCD00B97C88 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -51,6 +53,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				81144885187BDDD50050DEB6 /* AddressBook.framework in Frameworks */,
 				81318965187BDBCD00B97C88 /* CoreGraphics.framework in Frameworks */,
 				81318967187BDBCD00B97C88 /* UIKit.framework in Frameworks */,
 				81318963187BDBCD00B97C88 /* Foundation.framework in Frameworks */,
@@ -81,6 +84,7 @@
 		81318961187BDBCD00B97C88 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				81144884187BDDD50050DEB6 /* AddressBook.framework */,
 				81318962187BDBCD00B97C88 /* Foundation.framework */,
 				81318964187BDBCD00B97C88 /* CoreGraphics.framework */,
 				81318966187BDBCD00B97C88 /* UIKit.framework */,
@@ -332,6 +336,7 @@
 				8131898D187BDBCD00B97C88 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

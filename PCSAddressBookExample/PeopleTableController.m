@@ -13,20 +13,22 @@ typedef NS_ENUM(int, Sections) {
 
 @interface PeopleTableController()
 
-
+@property (nonatomic, strong) NSArray *people;
 
 @end
 
 @implementation PeopleTableController
 
-- (id)init {
+- (id)initWithGroup:(PCSAddressBookGroup *)group {
    if ((self = [super initWithStyle:UITableViewStylePlain])) {
+      self.group = group;
    }
    return self;
 }
 
 - (void)viewDidLoad {
    [super viewDidLoad];
+   self.people = self.group ? [self.group getAllMembers] : [[PCSAddressBook addressBook] getAllPeople];
 }
 
 //====================================================================================================
@@ -38,7 +40,7 @@ typedef NS_ENUM(int, Sections) {
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-   return 1;
+   return [self.people count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -49,7 +51,8 @@ typedef NS_ENUM(int, Sections) {
       cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
    }
    
-   cell.textLabel.text = @"hello";
+   PCSAddressBookPerson *person = self.people[indexPath.row];
+   cell.textLabel.text = person.fullName;
    
    return cell;
 }
