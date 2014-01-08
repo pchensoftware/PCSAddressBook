@@ -110,4 +110,13 @@
    return peopleObjects;
 }
 
+- (PCSAddressBookPerson *)getPersonWithRecordId:(ABRecordID)recordId {
+   ABRecordRef personRef = ABAddressBookGetPersonWithRecordID(self.addressBookRef, recordId);
+   if (! personRef)
+      return nil;
+   
+   PCSAddressBookPerson *person = [[PCSAddressBookPerson alloc] initWithRecordRef:personRef];
+   return person;
+}
+
 @end

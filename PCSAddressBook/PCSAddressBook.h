@@ -18,5 +18,6 @@
 - (void)requestAccessWithCompletion:(void(^)(BOOL granted, NSError *error))completion;
 - (NSArray *)getAllPeople;
 - (NSArray *)getPeopleForGroups:(NSArray *)groups;
+- (PCSAddressBookPerson *)getPersonWithRecordId:(ABRecordID)recordId;
 
 @end
