@@ -24,6 +24,8 @@
       self.photoThumbnail = nil;
       self.emails = [NSMutableArray array];
       self.phoneNumbers = [NSMutableArray array];
+      self.phoneNumberLabels = [NSMutableArray array];
+      
       [self _loadEmails];
       [self _loadNumbers];
       [self _loadCompanyInfo];
@@ -35,6 +37,7 @@
    if ((self = [super init])) {
       self.emails = [NSMutableArray array];
       self.phoneNumbers = [NSMutableArray array];
+      self.phoneNumberLabels = [NSMutableArray array];
    }
    return self;
 }
@@ -68,6 +71,14 @@
 - (void)_loadNumbers {
    ABMutableMultiValueRef phoneValueRefs = ABRecordCopyValue(self.recordRef, kABPersonPhoneProperty);
    [self.phoneNumbers setArray:(__bridge_transfer NSArray *)ABMultiValueCopyArrayOfAllValues(phoneValueRefs)];
+   
+   [self.phoneNumberLabels removeAllObjects];
+   int phoneNumbersCount = [self.phoneNumbers count];
+   for (int i=0; i<phoneNumbersCount; i++) {
+      CFStringRef phoneLabelRef = ABMultiValueCopyLabelAtIndex(phoneValueRefs, i);
+      NSString *phoneLabel = (__bridge_transfer NSString *) ABAddressBookCopyLocalizedLabel(phoneLabelRef);
+      [self.phoneNumberLabels addObject:phoneLabel];
+   }
 }
 
 - (void)_loadCompanyInfo {

@@ -16,6 +16,7 @@
 @property (nonatomic, strong) NSString *lastName;
 @property (nonatomic, strong) NSMutableArray *emails;
 @property (nonatomic, strong) NSMutableArray *phoneNumbers;
+@property (nonatomic, strong) NSMutableArray *phoneNumberLabels;
 @property (nonatomic, strong) NSString *companyName;
 @property (nonatomic, assign) BOOL isCompany;
 @property (nonatomic, strong) UIImage *photoThumbnail;
