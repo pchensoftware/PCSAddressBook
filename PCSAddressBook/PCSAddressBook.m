@@ -138,7 +138,10 @@
    NSArray *peopleMatchSingleWord = [PCSAddressBook convertPeopleRefsToObjects:(__bridge CFArrayRef)peopleRecordsMatchSingleWord];
    [peopleMatchSingleWord enumerateObjectsUsingBlock:^(PCSAddressBookPerson *person, NSUInteger idx, BOOL *stop) {
       NSString *fullName = person.fullName;
-      NSRange range = [searchString rangeOfString:fullName  options:NSCaseInsensitiveSearch];
+      if ([fullName length] == 0)
+         return;
+      
+      NSRange range = [searchString rangeOfString:fullName options:NSCaseInsensitiveSearch];
       if (range.location != NSNotFound) {
          [foundPeopleMutable addObject:person];
          [foundRangesMutable addObject:[NSValue valueWithRange:range]];
