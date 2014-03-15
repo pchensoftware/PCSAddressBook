@@ -48,7 +48,14 @@
 }
 
 - (NSString *)fullName {
-   return [NSString stringWithFormat:@"%@ %@", self.firstName, self.lastName];
+   if ([self.firstName length] == 0)
+      return self.lastName;
+   
+   else if ([self.lastName length] == 0)
+      return self.firstName;
+   
+   else
+      return [NSString stringWithFormat:@"%@ %@", self.firstName, self.lastName];
 }
 
 - (NSString *)displayName {
