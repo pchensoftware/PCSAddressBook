@@ -44,6 +44,15 @@
    return allPeople;
 }
 
++ (NSArray *)recordIDsForPeopleRefs:(NSArray *)peopleRefs {
+   NSMutableArray *recordIDs = [NSMutableArray array];
+   [peopleRefs enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+      ABRecordID recordID = ABRecordGetRecordID((__bridge ABRecordRef) obj);
+      [recordIDs addObject:@(recordID)];
+   }];
+   return recordIDs;
+}
+
 - (id)init {
    if ((self = [super init])) {
       self.addressBookRef = ABAddressBookCreateWithOptions(NULL, NULL);
@@ -108,6 +117,36 @@
    CFMutableArrayRef sortedPeople = [PCSAddressBook sortPeople:membersOfGroupsRef];
    NSArray *peopleObjects = [PCSAddressBook convertPeopleRefsToObjects:sortedPeople];
    return peopleObjects;
+}
+
+- (void)searchString:(NSString *)searchString foundPeople:(NSArray **)foundPeople inRanges:(NSArray **)foundRanges {
+   NSMutableArray *foundPeopleMutable = [NSMutableArray array];
+   NSMutableArray *foundRangesMutable = [NSMutableArray array];
+   
+   NSMutableSet *recordIdSet = [NSMutableSet set];
+   
+   NSArray *searchWords = [searchString componentsSeparatedByString:@" "];
+   for (NSString *searchWord in searchWords) {
+      CFArrayRef peopleWithSearchWord = ABAddressBookCopyPeopleWithName(self.addressBookRef, (__bridge CFStringRef) searchWord);
+      NSArray *recordIDs = [PCSAddressBook recordIDsForPeopleRefs:(__bridge_transfer NSArray *)peopleWithSearchWord];
+      [recordIdSet addObjectsFromArray:recordIDs];
+   }
+   
+   NSArray *peopleRecordsMatchSingleWord = [[recordIdSet allObjects] convert:^id(id element) {
+      return (__bridge id)(ABAddressBookGetPersonWithRecordID(self.addressBookRef, [element intValue]));
+   }];
+   NSArray *peopleMatchSingleWord = [PCSAddressBook convertPeopleRefsToObjects:(__bridge CFArrayRef)peopleRecordsMatchSingleWord];
+   [peopleMatchSingleWord enumerateObjectsUsingBlock:^(PCSAddressBookPerson *person, NSUInteger idx, BOOL *stop) {
+      NSString *fullName = person.fullName;
+      NSRange range = [searchString rangeOfString:fullName  options:NSCaseInsensitiveSearch];
+      if (range.location != NSNotFound) {
+         [foundPeopleMutable addObject:person];
+         [foundRangesMutable addObject:[NSValue valueWithRange:range]];
+      }
+   }];
+   
+   *foundPeople = foundPeopleMutable;
+   *foundRanges = foundRangesMutable;
 }
 
 - (PCSAddressBookPerson *)getPersonWithRecordId:(ABRecordID)recordId {
